@@ -1,0 +1,7 @@
+[package]
+name = "brainlag"
+version = "0.1.0"
+authors = ["saresend <saresend@usc.edu>"]
+
+[dependencies]
+clap = "2.31.2"
