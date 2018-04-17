@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::Read;
+use std::io::{Read, Write};
 use toml;
 
 #[derive(Serialize, Deserialize)]
@@ -8,7 +8,19 @@ struct BlToml {
 }
 
 pub fn save_value(key: &str, value: &str) {
-    let file = get_data_file();
+    let mut file = get_data_file();
+    let mut contents = String::new();
+
+    match file.read_to_string(&mut contents) {
+        Ok(_) => {}
+        Err(_) => {
+            println!("Couldn't save value");
+        }
+    };
+
+    contents += &format!("\n[[elements]]\n{}=\"{}\"", key, value);
+
+    file.write_all(&contents.as_bytes());
 }
 pub fn get_value(key: &str) -> Option<String> {
     let mut file = get_data_file();
