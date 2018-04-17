@@ -22,6 +22,7 @@ pub fn save_value(key: &str, value: &str) {
 
     file.write_all(&contents.as_bytes());
 }
+
 pub fn get_value(key: &str) -> Option<String> {
     let mut file = get_data_file();
 
