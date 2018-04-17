@@ -19,7 +19,6 @@ pub fn get_value(key: &str) -> Option<String> {
         Ok(_) => {}
         Err(_) => return None,
     };
-    println!("{}", contents);
     if let Ok(database) = toml::from_str::<BlToml>(&contents) {
         for element in database.elements {
             match element[key].as_str() {
@@ -35,10 +34,27 @@ pub fn get_value(key: &str) -> Option<String> {
 
 #[test]
 pub fn test_get_value() {
-    get_value("key1");
+    assert_eq!(Some("blessed".to_string()), get_value("key1"));
 }
-pub fn get_all_values() -> Vec<String> {
-    unimplemented!();
+pub fn print_all_values() {
+    let mut file = get_data_file();
+    let mut contents = String::new();
+
+    match file.read_to_string(&mut contents) {
+        Ok(_) => {}
+        Err(_) => println!("Couldn't find database file"),
+    };
+
+    if let Ok(db) = toml::from_str::<BlToml>(&contents) {
+        for element in db.elements {
+            print!("{}", element);
+        }
+    }
+}
+
+#[test]
+pub fn test_print_all_values() {
+    print_all_values();
 }
 fn get_data_file() -> File {
     if let Ok(file) = File::open("data.toml") {
