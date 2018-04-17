@@ -1,9 +1,13 @@
 extern crate clap;
+extern crate serde;
+extern crate toml;
+#[macro_use]
+extern crate serde_derive;
+mod database;
 
-use clap::{Arg, App};
+use clap::{App, Arg};
 
 fn main() {
-
     let matches = App::new("Brainlag")
         .version("1.0")
         .author("Samuel Resendez saresend@usc.edu")
@@ -28,8 +32,4 @@ fn main() {
             return;
         }
     }
-
-
-
-
 }
