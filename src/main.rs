@@ -1,6 +1,6 @@
 extern crate clap;
 extern crate serde;
-extern crate toml;
+extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
 mod database;

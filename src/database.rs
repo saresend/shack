@@ -1,27 +1,32 @@
+use serde_json;
 use std::fs::File;
 use std::fs::OpenOptions;
 use std::io::{Read, Write};
-use toml;
 #[derive(Serialize, Deserialize, Debug)]
-struct BlToml {
-    elements: Vec<toml::value::Value>,
+struct KeyVal {
+    pub key: String,
+    pub val: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Data {
+    pub elements: Vec<KeyVal>,
 }
 
 pub fn delete_value(key: &str) {
-    let mut file = get_data_file();
+    let mut file = get_data_file(false);
 
     let mut contents = String::new();
     match file.read_to_string(&mut contents) {
         Ok(_) => {
-            if let Ok(mut data) = toml::from_str::<BlToml>(&contents) {
-                data.elements.retain(|x| x[key].as_str().is_none());
-                println!("Parsed form: {:?}", toml::to_string(&data).unwrap());
-                // file.write_all(toml::to_string(&data).unwrap().as_bytes()).expect("Unexpectedly failed to write to data file. Please file a bug report to http://github.com/saresend/shack");
-                return;
+            if let Ok(mut data) = serde_json::from_str::<Data>(&contents) {
+                data.elements.retain(|x| x.key != key);
+                file.write_all(serde_json::to_string(&data).unwrap().as_bytes())
+                    .unwrap();
             }
             println!("Couldn't delete value");
         }
-        Err(_) => println!("Couldn't delete value"),
+        Err(e) => println!("Couldn't delete value {}", e),
     };
 }
 
@@ -37,10 +42,19 @@ fn delete_test() {
 }
 
 pub fn save_value(key: &str, value: &str) {
-    let mut file = get_data_file();
-
-    file.write_all(&format!("\n[[elements]]\n{}=\"{}\"", key, value).as_bytes())
-        .unwrap();
+    let mut file = get_data_file(false);
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+    if let Ok(mut database) = serde_json::from_str::<Data>(&contents) {
+        database.elements.push(KeyVal {
+            key: String::from(key),
+            val: String::from(value),
+        });
+        file.set_len(0).unwrap();
+        file.write_all(serde_json::to_string(&database).unwrap().as_bytes())
+            .unwrap();
+    }
+    println!("Couldn't parse");
 }
 
 #[test]
@@ -50,7 +64,7 @@ fn test_save() {
 }
 
 pub fn get_value(key: &str) -> Option<String> {
-    let mut file = get_data_file();
+    let mut file = get_data_file(true);
 
     let mut contents = String::new();
 
@@ -58,22 +72,18 @@ pub fn get_value(key: &str) -> Option<String> {
         Ok(_) => {}
         Err(_) => return None,
     };
-    if let Ok(database) = toml::from_str::<BlToml>(&contents) {
+    if let Ok(database) = serde_json::from_str::<Data>(&contents) {
         for element in database.elements {
-            println!("{:?}", element);
-            match element[key].as_str() {
-                Some(val) => return Some(val.to_string()),
-                None => {}
-            };
+            if element.key == key {
+                return Some(element.val);
+            }
         }
-        None
-    } else {
-        None
     }
+    None
 }
 
 pub fn print_all_values() {
-    let mut file = get_data_file();
+    let mut file = get_data_file(true);
     let mut contents = String::new();
 
     match file.read_to_string(&mut contents) {
@@ -81,9 +91,9 @@ pub fn print_all_values() {
         Err(_) => println!("Couldn't find database file"),
     };
 
-    if let Ok(db) = toml::from_str::<BlToml>(&contents) {
+    if let Ok(db) = serde_json::from_str::<Data>(&contents) {
         for element in db.elements {
-            print!("{}", element);
+            print!("{} : {}", element.key, element.val);
         }
     }
 }
@@ -92,15 +102,21 @@ pub fn print_all_values() {
 pub fn test_print_all_values() {
     print_all_values();
 }
-fn get_data_file() -> File {
-    if let Ok(file) = OpenOptions::new().read(true).append(true).open("data.toml") {
+fn get_data_file(should_append: bool) -> File {
+    if let Ok(file) = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .append(should_append)
+        .open("data.json")
+    {
         file
     } else {
-        File::create("data.toml").unwrap();
+        File::create("data.json").unwrap();
         OpenOptions::new()
             .read(true)
-            .append(true)
-            .open("data.toml")
+            .write(true)
+            .append(should_append)
+            .open("data.json")
             .unwrap()
     }
 }
