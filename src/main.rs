@@ -8,10 +8,10 @@ mod database;
 use clap::{App, Arg};
 
 fn main() {
-    let matches = App::new("Brainlag")
+    let matches = App::new("Shack")
         .version("1.0")
         .author("Samuel Resendez saresend@usc.edu")
-        .about("Brainlag is a dead easy CLI for saving values so you don't have to remember them")
+        .about("Shack is a dead easy CLI for saving values so you don't have to remember them")
         .arg(Arg::with_name("CMD").index(1).required(true))
         .arg(Arg::with_name("PARAM").index(2))
         .arg(Arg::with_name("PARAM2").index(3))
@@ -24,6 +24,10 @@ fn main() {
         Some("get") => match matches.value_of("PARAM") {
             Some(key) => println!("{:?}", database::get_value(key)),
             None => println!("Usage: get <PARAM>. See help for usage."),
+        },
+        Some("del") => match matches.value_of("PARAM") {
+            Some(key) => database::delete_value(key),
+            None => println!("Usage: del <PARAM>. See help for usage."),
         },
 
         Some("set") => {

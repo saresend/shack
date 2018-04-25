@@ -1,10 +1,7 @@
 
 [[elements]]
-key1 = "blessed"
-
+hello="okay"
 [[elements]]
-key2 = "more tests"
-
+digital_ocean_ip="123.123.123.123"
 [[elements]]
-key3 = "even something else"
-
+hello="okay"
