@@ -25,7 +25,7 @@ pub fn delete_value(key: &str) {
     let mut contents = String::new();
 
     f.read_to_string(&mut contents).unwrap();
-    println!("Trying to parse: {}", contents);
+
     let mut data: Data = serde_json::from_str(&contents).unwrap();
     data.elements.retain(|x| x.key != key);
     f.set_len(0).unwrap(); //Hopefully clear the file
@@ -75,7 +75,7 @@ pub fn get_value(key: &str) -> Option<String> {
     let mut contents = String::new();
 
     f.read_to_string(&mut contents).unwrap();
-    println!("Trying to parse: {}", contents);
+
     let data: Data = serde_json::from_str(&contents).unwrap();
     for element in data.elements.iter() {
         if element.key == key {
@@ -100,7 +100,7 @@ pub fn print_all_values() {
 
     if let Ok(db) = serde_json::from_str::<Data>(&contents) {
         for element in db.elements {
-            print!("{} : {}", element.key, element.val);
+            println!("{} : {}", element.key, element.val);
         }
     }
 }

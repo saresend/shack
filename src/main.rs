@@ -24,7 +24,13 @@ fn main() {
             database::print_all_values();
         }
         Some("get") => match matches.value_of("PARAM") {
-            Some(key) => println!("{:?}", database::get_value(key)),
+            Some(key) => {
+                if let Some(val) = database::get_value(key) {
+                    println!("{}", val);
+                } else {
+                    println!("Couldn't find value for key: {}", key);
+                }
+            }
             None => println!("Usage: get <PARAM>. See help for usage."),
         },
         Some("del") => match matches.value_of("PARAM") {
