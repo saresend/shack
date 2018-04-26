@@ -3,6 +3,7 @@ extern crate serde;
 extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
+extern crate app_dirs;
 mod database;
 
 use clap::{App, Arg};

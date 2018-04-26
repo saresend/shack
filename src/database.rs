@@ -1,3 +1,4 @@
+use app_dirs;
 use serde_json;
 use std::fs;
 use std::fs::File;
@@ -16,13 +17,24 @@ struct Data {
     pub elements: Vec<KeyVal>,
 }
 
-const DATABASE_URL: &str = "~/.shack_data";
+const APP_INFO: app_dirs::AppInfo = app_dirs::AppInfo {
+    name: "Shack",
+    author: "Samuel Resendez",
+};
+
+pub fn database_url() -> String {
+    app_dirs::app_dir(app_dirs::AppDataType::UserData, &APP_INFO, "data")
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_string() + "data.json"
+}
 
 pub fn delete_value(key: &str) {
     let mut f = OpenOptions::new()
         .read(true)
         .write(true)
-        .open(DATABASE_URL)
+        .open(&database_url())
         .unwrap();
     let mut contents = String::new();
 
@@ -47,7 +59,7 @@ pub fn save_value(key: &str, value: &str) {
     let mut f = OpenOptions::new()
         .read(true)
         .write(true)
-        .open(DATABASE_URL)
+        .open(&database_url())
         .unwrap();
     let mut contents = String::new();
 
@@ -73,7 +85,7 @@ fn test_save() {
 }
 
 pub fn get_value(key: &str) -> Option<String> {
-    let mut f = OpenOptions::new().read(true).open(DATABASE_URL).unwrap();
+    let mut f = OpenOptions::new().read(true).open(&database_url()).unwrap();
     let mut contents = String::new();
 
     f.read_to_string(&mut contents).unwrap();
@@ -91,7 +103,7 @@ pub fn print_all_values() {
     let mut file = OpenOptions::new()
         .read(true)
         .write(true)
-        .open(DATABASE_URL)
+        .open(&database_url())
         .unwrap();
     let mut contents = String::new();
 
@@ -107,9 +119,9 @@ pub fn print_all_values() {
     }
 }
 pub fn initialize() {
-    if let Err(_) = fs::metadata(DATABASE_URL) {
+    if let Err(_) = fs::metadata(&database_url()) {
         let cont = Data { elements: vec![] };
-        let mut f = File::create(DATABASE_URL).unwrap();
+        let mut f = File::create(&database_url()).unwrap();
 
         f.write_all(serde_json::to_string(&cont).unwrap().as_bytes())
             .unwrap();
