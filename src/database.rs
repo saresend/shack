@@ -51,6 +51,7 @@ pub fn delete_value(key: &str) {
 
 #[test]
 fn delete_test() {
+    initialize();
     delete_value("digital_ocean_ip");
     assert_eq!(get_value("digital_ocean_ip"), None);
 }
@@ -130,5 +131,6 @@ pub fn initialize() {
 
 #[test]
 pub fn test_print_all_values() {
+    initialize();
     print_all_values();
 }
