@@ -17,6 +17,8 @@ fn main() {
         .arg(Arg::with_name("PARAM2").index(3))
         .get_matches();
 
+    database::initialize();
+
     match matches.value_of("CMD") {
         Some("ls") => {
             database::print_all_values();
