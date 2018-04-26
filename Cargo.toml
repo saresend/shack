@@ -3,8 +3,20 @@ name = "shack"
 version = "0.1.0"
 authors = ["saresend <saresend@usc.edu>"]
 
+description = """
+Line oriented search tool using Rust's regex library. Combines the raw
+performance of grep with the usability of the silver searcher.
+"""
+documentation = "https://github.com/BurntSushi/ripgrep"
+homepage = "https://github.com/saresend/shack"
+repository = "https://github.com/saresend/shack"
+readme = "README.md"
+license = "Unlicense/MIT"
+
 [dependencies]
 clap = "2.31.2"
 serde = "1.0.38"
 serde_derive = "1.0.38"
 serde_json = "1.0.16"
+
+
