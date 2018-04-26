@@ -92,7 +92,7 @@ pub fn get_value(key: &str) -> Option<String> {
     f.read_to_string(&mut contents).unwrap();
 
     let data: Data = serde_json::from_str(&contents).unwrap();
-    for element in data.elements.iter() {
+    for element in data.elements {
         if element.key == key {
             return Some(element.val.to_string());
         }
