@@ -16,11 +16,13 @@ struct Data {
     pub elements: Vec<KeyVal>,
 }
 
+const DATABASE_URL: &str = "~/.shack_data";
+
 pub fn delete_value(key: &str) {
     let mut f = OpenOptions::new()
         .read(true)
         .write(true)
-        .open("data.json")
+        .open(DATABASE_URL)
         .unwrap();
     let mut contents = String::new();
 
@@ -45,7 +47,7 @@ pub fn save_value(key: &str, value: &str) {
     let mut f = OpenOptions::new()
         .read(true)
         .write(true)
-        .open("data.json")
+        .open(DATABASE_URL)
         .unwrap();
     let mut contents = String::new();
 
@@ -71,7 +73,7 @@ fn test_save() {
 }
 
 pub fn get_value(key: &str) -> Option<String> {
-    let mut f = OpenOptions::new().read(true).open("data.json").unwrap();
+    let mut f = OpenOptions::new().read(true).open(DATABASE_URL).unwrap();
     let mut contents = String::new();
 
     f.read_to_string(&mut contents).unwrap();
@@ -89,7 +91,7 @@ pub fn print_all_values() {
     let mut file = OpenOptions::new()
         .read(true)
         .write(true)
-        .open("data.json")
+        .open(DATABASE_URL)
         .unwrap();
     let mut contents = String::new();
 
@@ -105,9 +107,9 @@ pub fn print_all_values() {
     }
 }
 pub fn initialize() {
-    if let Err(_) = fs::metadata("data.json") {
+    if let Err(_) = fs::metadata(DATABASE_URL) {
         let cont = Data { elements: vec![] };
-        let mut f = File::create("data.json").unwrap();
+        let mut f = File::create(DATABASE_URL).unwrap();
 
         f.write_all(serde_json::to_string(&cont).unwrap().as_bytes())
             .unwrap();
