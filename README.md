@@ -10,7 +10,7 @@ Shack, a dead simple CLI key value store, for saving simple stuff thats hard to 
 
 ## Installation 
 
-As of this writing, I haven't distributed binaries of shack, and so the only way to install it is via cargo, Rust's package manager! 
+The best way to install to install this is to use the Rust's package manager, cargo! 
 
 <code>cargo install shack</code>
 
