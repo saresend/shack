@@ -1,6 +1,8 @@
 # Shack 
 
 [![Build Status](https://travis-ci.org/saresend/shack.svg?branch=master)](https://travis-ci.org/saresend/shack)
+![Crates.io](https://img.shields.io/crates/v/shack.svg)
+
 
 
 Shack, a dead simple CLI key value store, for saving simple stuff thats hard to remember. 
