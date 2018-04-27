@@ -3,9 +3,7 @@ name = "shack"
 version = "0.1.1"
 authors = ["saresend <saresend@usc.edu>"]
 
-description = """
-Line oriented search tool using Rust's regex library. Combines the raw
-performance of grep with the usability of the silver searcher.
+description = """A dead simple CLI for remembering simple stuff thats hard to remember.
 """
 documentation = "https://github.com/BurntSushi/ripgrep"
 homepage = "https://github.com/saresend/shack"
