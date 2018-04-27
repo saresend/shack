@@ -16,6 +16,10 @@ Shack, a dead simple CLI key value store, for saving simple stuff thats hard to 
 [![asciicast](https://asciinema.org/a/cZHrSyoKerYPQeMeQFnNck1VO.png)](https://asciinema.org/a/cZHrSyoKerYPQeMeQFnNck1VO)
 
 
+### Text Version 
+
+![sample usage](images/sample_usage.png)]
+
 
 Shack will persist simple key values, and supports the Following commands: 
 
